@@ -424,6 +424,27 @@ FodyWeavers.xsd
 # Windows Installer files from build outputs
 *.cab
 *.msi
+
+# Application local configuration for API keys and secrets
+appsettings.Development.json
+appsettings.Production.json
+local.settings.json
+secrets.json
+*.env
+
+# Папка с опубликованным кодом (Railway сам собирает проект)
+/out/
+
+# Локальные секреты инструментария EF Core (если будете использовать dotnet user-secrets)
+secrets.json
+
+# Файлы карт OSM, если они лежат в папке infra/docker/graphhopper/data/
+infra/docker/graphhopper/data/*.osm.pbf
+infra/docker/graphhopper/data/*.mbtiles
+
+# Базы данных SQLite/MongoDB локальной разработки, если появятся
+*.db
+*.sqlite
 *.msix
 *.msm
 *.msp
