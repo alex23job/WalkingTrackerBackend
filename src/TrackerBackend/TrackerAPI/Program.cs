@@ -120,6 +120,17 @@ namespace TrackerAPI
 
             builder.Services.AddAuthorization();
 
+            // Разрешаем доступ откуда угодно (для теста). В продакшене лучше ограничить!
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()      // Любой сайт/приложение
+                          .AllowAnyMethod()       // GET, POST, PUT...
+                          .AllowAnyHeader();      // Заголовки Authorization и т.д.
+                });
+            });
+
             // ------------------------------------------------------------
             // 4. ПОСТРОЕНИЕ КОНТЕЙНЕРА ЗАПРОСОВ
             // ------------------------------------------------------------
@@ -132,6 +143,7 @@ namespace TrackerAPI
             // ВАЖНО: Порядок middleware имеет значение!
             app.UseHttpsRedirection();
 
+            app.UseCors("AllowAll"); // <-- Добавьте эту строку ПЕРЕД UseAuthorization()
             // Сначала идет аутентификация (проверка токена), потом авторизация (проверка ролей/прав)
             app.UseAuthentication();
             app.UseAuthorization();
