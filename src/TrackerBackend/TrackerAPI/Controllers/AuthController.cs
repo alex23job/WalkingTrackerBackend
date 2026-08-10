@@ -26,24 +26,47 @@ namespace TrackerAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            if (await _context.Users.AnyAsync(u => u.EmailHash == HashEmail(request.Email)))
+            try
             {
-                return Conflict("Пользователь с такой почтой уже существует");
+                // Проверка на дубликат email через хеширование
+                var existingUser = await _context.Users
+                    .AsNoTracking() // Оптимизация чтения
+                    .FirstOrDefaultAsync(u => u.EmailHash == HashEmail(request.Email));
+
+                if (existingUser != null)
+                {
+                    return Conflict(new { message = "Пользователь с такой почтой уже существует" });
+                }
+
+                // Создание пользователя
+                var user = new User
+                {
+                    EmailHash = HashEmail(request.Email),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                    CreatedAt = DateTime.UtcNow,
+                    StepLengthMeters = 0.72
+                };
+
+                _context.Users.Add(user);
+
+                // Сохраняем в реальную БД (если строка подключения настроена верно)
+                await _context.SaveChangesAsync();
+
+                // Генерация токена
+                var token = GenerateJwtToken(user);
+
+                // !!! ИСПРАВЛЕНИЕ: Возвращаем строго наш DTO !!!
+                return Ok(new AuthResponseDto
+                {
+                    Token = token
+                });
             }
-
-            var user = new User
+            catch (Exception ex)
             {
-                EmailHash = HashEmail(request.Email),
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                CreatedAt = DateTime.UtcNow,
-                StepLengthMeters = 0.72 // Дефолтное значение
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            var token = GenerateJwtToken(user);
-            return Ok(new { Token = token });
+                // Логируем внутреннюю ошибку сервера
+                Console.WriteLine($"[ERROR] Registration failed: {ex.Message}");
+                return StatusCode(500, new { message = "Внутренняя ошибка сервера регистрации." });
+            }
         }
 
         [HttpPost("login")]
