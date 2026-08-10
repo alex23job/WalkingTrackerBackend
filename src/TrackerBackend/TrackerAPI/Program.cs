@@ -23,6 +23,10 @@ namespace TrackerAPI
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+                // === НОВАЯ СТРОКА ДЛЯ ОТЛАДКИ ===
+                // Заставляем сервер написать в лог то, что он прочитал из Variables
+                Console.WriteLine($"[DEBUG] DB Connection String Read: '{connectionString}'");
+
                 /*if (string.IsNullOrEmpty(connectionString))
                 {
                     // Локальная разработка: база в оперативной памяти
