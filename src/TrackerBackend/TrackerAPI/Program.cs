@@ -38,7 +38,12 @@ namespace TrackerAPI
             // ------------------------------------------------------------
             // 2. СЛУЖБЫ (КОНТРОЛЛЕРЫ И API ИССЛЕДОВАТЕЛЬ)
             // ------------------------------------------------------------
-            builder.Services.AddControllers();            // Add services to the container.
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null; // Отключаем принудительное изменение регистра
+                                                                           // ИЛИ явно разрешаем маленькие буквы, если включено что-то другое:
+                                                                           // options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; 
+            });            // Add services to the container.
 
             // Регистрируем генератор OpenAPI
             builder.Services.AddEndpointsApiExplorer();
