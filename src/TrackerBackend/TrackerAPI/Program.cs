@@ -37,7 +37,8 @@ namespace TrackerAPI
                     // Production (Railway): נואכüםûי PostgreSQL
                     options.UseNpgsql(connectionString);
                 }*/
-                options.UseNpgsql(connectionString!);
+                //options.UseNpgsql(connectionString!);
+                options.UseInMemoryDatabase("WalkerLocalDB");
             });
 
             // ------------------------------------------------------------
