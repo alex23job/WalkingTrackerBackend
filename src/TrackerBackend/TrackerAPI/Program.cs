@@ -125,7 +125,9 @@ namespace TrackerAPI
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.AllowAnyOrigin()      // Любой сайт/приложение
+                    //policy.AllowAnyOrigin()      // Любой сайт/приложение
+                    policy.WithOrigins("http://localhost:8080",   // Браузер/SWAGGER
+                                       "http://10.0.2.2:8080")     // Эмулятор Genymotion/AVD
                           .AllowAnyMethod()       // GET, POST, PUT...
                           .AllowAnyHeader();      // Заголовки Authorization и т.д.
                 });
@@ -144,6 +146,7 @@ namespace TrackerAPI
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll"); // <-- Добавьте эту строку ПЕРЕД UseAuthorization()
+
             // Сначала идет аутентификация (проверка токена), потом авторизация (проверка ролей/прав)
             app.UseAuthentication();
             app.UseAuthorization();
