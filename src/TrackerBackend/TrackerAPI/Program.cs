@@ -23,7 +23,7 @@ namespace TrackerAPI
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-                if (string.IsNullOrEmpty(connectionString))
+                /*if (string.IsNullOrEmpty(connectionString))
                 {
                     // Локальная разработка: база в оперативной памяти
                     options.UseInMemoryDatabase("WalkerLocalDB");
@@ -32,7 +32,8 @@ namespace TrackerAPI
                 {
                     // Production (Railway): реальный PostgreSQL
                     options.UseNpgsql(connectionString);
-                }
+                }*/
+                options.UseNpgsql(connectionString!);
             });
 
             // ------------------------------------------------------------
