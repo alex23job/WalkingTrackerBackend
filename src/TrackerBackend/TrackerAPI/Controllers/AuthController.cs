@@ -29,10 +29,10 @@ namespace TrackerAPI.Controllers
             try
             {
                 // Проверка на дубликат email через хеширование
-                /*var existingUser = await _context.Users
+                var existingUser = await _context.Users
                     .AsNoTracking() // Оптимизация чтения
-                    .FirstOrDefaultAsync(u => u.EmailHash == HashEmail(request.Email));*/
-                var existingUser = await _context.Users.AnyAsync(u => u.EmailHash == HashEmail(request.Email));
+                    .FirstOrDefaultAsync(u => u.EmailHash == HashEmail(request.Email));
+                //var existingUser = await _context.Users.AnyAsync(u => u.EmailHash == HashEmail(request.Email));
 
                 if (existingUser != null)
                 {
