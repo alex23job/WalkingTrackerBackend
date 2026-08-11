@@ -125,9 +125,9 @@ namespace TrackerAPI
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    //policy.AllowAnyOrigin()      // Любой сайт/приложение
-                    policy.WithOrigins("http://localhost:8080",   // Браузер/SWAGGER
-                                       "http://10.0.2.2:8080")     // Эмулятор Genymotion/AVD
+                    policy.AllowAnyOrigin()      // Любой сайт/приложение
+                    //policy.WithOrigins("http://localhost:8080",   // Браузер/SWAGGER
+                    //                   "http://10.0.2.2:8080")     // Эмулятор Genymotion/AVD
                           .AllowAnyMethod()       // GET, POST, PUT...
                           .AllowAnyHeader();      // Заголовки Authorization и т.д.
                 });
