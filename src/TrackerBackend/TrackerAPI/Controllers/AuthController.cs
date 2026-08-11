@@ -56,6 +56,12 @@ namespace TrackerAPI.Controllers
                 // Генерация токена
                 var token = GenerateJwtToken(user);
 
+                // Если генерация токена упала (например, неверный Secret) - мы узнаем об этом
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    throw new InvalidOperationException("JWT generation failed silently.");
+                }
+
                 // !!! ИСПРАВЛЕНИЕ: Возвращаем строго наш DTO !!!
                 return Ok(new AuthResponseDto
                 {
